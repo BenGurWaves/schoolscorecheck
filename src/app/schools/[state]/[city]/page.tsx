@@ -5,7 +5,7 @@ import TopographicTexture from '@/components/TopographicTexture';
 import SearchForm from '@/components/SearchForm';
 
 interface CityPageProps {
-  params: { state: string; city: string };
+  params: Promise<{ state: string; city: string }>;
 }
 
 export async function generateStaticParams() {
@@ -22,12 +22,13 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: CityPageProps): Promise<Metadata> {
-  const stateCode = params.state.toUpperCase();
-  const cityName = params.city.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+  const { state, city } = await params;
+  const stateCode = state.toUpperCase();
+  const cityName = city.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
   
-  const state = US_STATES.find((s) => s.code === stateCode);
+  const stateData = US_STATES.find((s) => s.code === stateCode);
   
-  if (!state) {
+  if (!stateData) {
     return {
       title: 'City Not Found',
     };
@@ -35,23 +36,24 @@ export async function generateMetadata({ params }: CityPageProps): Promise<Metad
 
   return {
     title: `${cityName} School District Ratings & Best Schools | SchoolScoreCheck`,
-    description: `Find the best school districts and schools in ${cityName}, ${state.name}. Compare test scores, graduation rates, and student-teacher ratios using official NCES data.`,
+    description: `Find the best school districts and schools in ${cityName}, ${stateData.name}. Compare test scores, graduation rates, and student-teacher ratios using official NCES data.`,
     keywords: `${cityName} schools, ${cityName} school district, best schools in ${cityName}, ${cityName} education data`,
     openGraph: {
       title: `${cityName} School District Ratings | SchoolScoreCheck`,
-      description: `Official NCES education data for ${cityName}, ${state.name} schools.`,
+      description: `Official NCES education data for ${cityName}, ${stateData.name} schools.`,
       type: 'website',
     },
   };
 }
 
-export default function CityPage({ params }: CityPageProps) {
-  const stateCode = params.state.toUpperCase();
-  const cityName = params.city.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+export default async function CityPage({ params }: CityPageProps) {
+  const { state, city } = await params;
+  const stateCode = state.toUpperCase();
+  const cityName = city.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
   
-  const state = US_STATES.find((s) => s.code === stateCode);
+  const stateData = US_STATES.find((s) => s.code === stateCode);
   
-  if (!state) {
+  if (!stateData) {
     return <div>State not found</div>;
   }
 
@@ -88,7 +90,7 @@ export default function CityPage({ params }: CityPageProps) {
             </h2>
             
             <p className="font-body text-lg text-deep-slate/70 mb-8">
-              Search any address in {cityName}, {state.name} to see the assigned school district, individual schools, test scores, graduation rates, and how they compare to {state.name} state averages.
+              Search any address in {cityName}, {stateData.name} to see the assigned school district, individual schools, test scores, graduation rates, and how they compare to {stateData.name} state averages.
             </p>
 
             <div className="mb-12">
@@ -100,7 +102,7 @@ export default function CityPage({ params }: CityPageProps) {
                 {cityName} serves students across multiple school districts, each with distinct performance characteristics. Understanding which district serves a specific address is the first step in evaluating school options. SchoolScoreCheck uses official NCES data to provide accurate district assignments based on geographic boundaries.
               </p>
               <p>
-                When evaluating schools in {cityName}, key metrics include student-teacher ratios (lower ratios often indicate more individualized attention), free/reduced lunch percentages (an economic indicator that helps contextualize performance), state test proficiency rates in reading and mathematics, and graduation rates for high schools. Each metric is compared against {state.name} state averages to provide meaningful context.
+                When evaluating schools in {cityName}, key metrics include student-teacher ratios (lower ratios often indicate more individualized attention), free/reduced lunch percentages (an economic indicator that helps contextualize performance), state test proficiency rates in reading and mathematics, and graduation rates for high schools. Each metric is compared against {stateData.name} state averages to provide meaningful context.
               </p>
               <p>
                 The best school district for your family depends on your specific needs—some districts excel in college preparation, others in arts programs, still others in career and technical education. Use the data on SchoolScoreCheck as a starting point, then visit schools directly, talk to administrators and teachers, and consider your child's unique learning style and interests.
@@ -109,11 +111,11 @@ export default function CityPage({ params }: CityPageProps) {
 
             <div className="mb-12">
               <h3 className="font-display font-semibold text-2xl text-deep-slate mb-6">
-                How {cityName} Schools Compare to {state.name} Averages
+                How {cityName} Schools Compare to {stateData.name} Averages
               </h3>
               <div className="p-6 border border-deep-slate/10">
                 <p className="font-body text-deep-slate/70">
-                  Search a specific address in {cityName} to see detailed performance data for the assigned schools and how they compare to {state.name} state averages across all key metrics.
+                  Search a specific address in {cityName} to see detailed performance data for the assigned schools and how they compare to {stateData.name} state averages across all key metrics.
                 </p>
               </div>
             </div>
@@ -124,8 +126,8 @@ export default function CityPage({ params }: CityPageProps) {
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {/* This would be dynamically populated with nearby cities */}
-                <a href={`/schools/${state.code.toLowerCase()}`} className="font-body text-deep-slate/70 hover:text-copper-accent transition-colors">
-                  All {state.name} cities
+                <a href={`/schools/${stateData.code.toLowerCase()}`} className="font-body text-deep-slate/70 hover:text-copper-accent transition-colors">
+                  All {stateData.name} cities
                 </a>
               </div>
             </div>
