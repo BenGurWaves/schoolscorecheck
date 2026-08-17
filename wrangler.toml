@@ -1,0 +1,13 @@
+name = "schoolscorecheck"
+compatibility_date = "2024-01-01"
+
+[vars]
+NEXT_PUBLIC_BASE_URL = "https://schoolscorecheck.calyvent.com"
+
+# Secrets (set via: wrangler secret put <SECRET_NAME>)
+# STRIPE_SECRET_KEY
+# STRIPE_WEBHOOK_SECRET
+# SUPABASE_SERVICE_ROLE_KEY
+# NEXT_PUBLIC_SUPABASE_URL
+# NEXT_PUBLIC_SUPABASE_ANON_KEY
+# NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
