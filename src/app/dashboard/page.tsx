@@ -5,6 +5,8 @@ import { createClient } from '@/lib/supabase/client';
 import Cursor from '@/components/Cursor';
 import TopographicTexture from '@/components/TopographicTexture';
 
+export const dynamic = 'force-dynamic';
+
 interface WatchedItem {
   id: string;
   type: 'district' | 'school';
@@ -17,11 +19,15 @@ export default function Dashboard() {
   const [watchedItems, setWatchedItems] = useState<WatchedItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
-  const supabase = createClient();
+  const [supabase, setSupabase] = useState<any>(null);
 
   useEffect(() => {
+    // Only create Supabase client on client side
+    const client = createClient();
+    setSupabase(client);
+
     async function loadWatchedItems() {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await client.auth.getUser();
       
       if (!user) {
         window.location.href = '/';
@@ -30,7 +36,7 @@ export default function Dashboard() {
 
       setUser(user);
 
-      const { data, error } = await supabase
+      const { data, error } = await client
         .from('watched_items')
         .select('*')
         .eq('user_id', user.id)
@@ -46,9 +52,10 @@ export default function Dashboard() {
     }
 
     loadWatchedItems();
-  }, [supabase]);
+  }, []);
 
   async function handleRemove(id: string) {
+    if (!supabase) return;
     const { error } = await supabase
       .from('watched_items')
       .delete()
@@ -60,6 +67,7 @@ export default function Dashboard() {
   }
 
   async function handleSignOut() {
+    if (!supabase) return;
     await supabase.auth.signOut();
     window.location.href = '/';
   }
