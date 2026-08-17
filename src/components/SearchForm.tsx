@@ -1,19 +1,26 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface SearchFormProps {
-  onSearch: (address: string) => void;
+  onSearch?: (address: string) => void;
   isLoading?: boolean;
 }
 
 export default function SearchForm({ onSearch, isLoading }: SearchFormProps) {
   const [address, setAddress] = useState('');
+  const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (address.trim()) {
-      onSearch(address.trim());
+      if (onSearch) {
+        onSearch(address.trim());
+      } else {
+        // Redirect to homepage with address as query param
+        router.push(`/?address=${encodeURIComponent(address.trim())}`);
+      }
     }
   };
 

@@ -94,7 +94,7 @@ export default async function CityPage({ params }: CityPageProps) {
             </p>
 
             <div className="mb-12">
-              <SearchForm onSearch={() => {}} />
+              <SearchForm />
             </div>
 
             <div className="font-body text-deep-slate/80 space-y-4 leading-relaxed mb-12">
