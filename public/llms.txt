@@ -1,0 +1,39 @@
+# SchoolScoreCheck
+
+SchoolScoreCheck provides instant school performance lookup by address using official NCES (National Center for Education Statistics) data from the U.S. Department of Education.
+
+## Core Value Proposition
+
+See the real data behind any school district. Search any address to get assigned public school district and individual schools with test scores, graduation rates, student-teacher ratios, and comparisons to state averages. Data is sourced from NCES, not crowdsourced ratings.
+
+## Site Structure
+
+- `/` - Homepage with address search and results display
+- `/dashboard` - User dashboard for watched districts/schools and alerts (requires authentication)
+- `/pricing` - Pricing tiers (Free: unlimited searches, 3 watched items; Pro: $6.99/month, unlimited watched items, comparisons, PDF reports)
+- `/about` - About page with data source information and disclaimer
+- `/schools/[state]` - State-level school district pages (50 states)
+- `/schools/[state]/[city]` - City-level school pages (100+ major cities)
+
+## Key Features
+
+- Address geocoding via U.S. Census Geocoder
+- School district boundary resolution via NCES School District Locator API
+- NCES Common Core of Data (CCD) for district and school records
+- State education department test score/proficiency data
+- Comparison badges: Above state average / Near state average / Below state average
+- 24-hour caching for performance
+- Email/password authentication (no confirmation required)
+- Stripe Checkout for paid subscriptions
+
+## Data Source
+
+All data comes from the National Center for Education Statistics (NCES), part of the U.S. Department of Education. This includes enrollment, student-teacher ratios, free/reduced lunch percentages, state test proficiency rates, and graduation rates.
+
+## Contact
+
+mailto:contact@calyvent.com?subject=SchoolScoreCheck%20Inquiry
+
+## Important Disclaimer
+
+School performance data reflects the most recently published NCES figures and may not capture recent changes in staff, programs, or performance. This is one input for a decision, not a complete picture — visit schools directly when possible.

@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+Allow: /api/search
+Allow: /schools/
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+Sitemap: https://schoolscorecheck.calyvent.com/sitemap.xml
